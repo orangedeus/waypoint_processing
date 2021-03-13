@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var haversine = require('haversine')
-router.use(express.json())
-var pgp = require('pg-promise')({});
-var db = pgp('postgresql://cs198ndsg:ndsg@localhost:5432/cs198ndsg');
+var haversine = require('haversine');
+var db = require('../db');
+router.use(express.json());
+
 
 router.get('/', function(req, res, next) {
     db.one('SELECT * FROM test;').then(data => {
@@ -197,8 +197,10 @@ router.post('/update', function(req, res, next) {
 
 router.post('/insert', function(req, res, next) {
     body = req.body;
-    console.log(`INSERT INTO stops values (point(${body.location.x}, ${body.location.y}), ${body.people}, '${body.url}');`);
     db.any(`INSERT INTO stops values (point(${body.location.x}, ${body.location.y}), ${body.people}, '${body.url}');`)
+    .then(() => {
+        res.send("Success!")
+    })
     .catch(error => {
         console.log(error)
     });

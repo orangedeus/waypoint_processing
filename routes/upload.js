@@ -13,7 +13,6 @@ router.post('/', function(req, res) {
             return res.status(500).send(err);
         }
     });
-    console.log(req.files);
     res.send('Uploaded!');
 });
 

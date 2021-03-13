@@ -31,7 +31,7 @@ router.post('/', function(req, res) {
                 }
             });
         }
-        let run = exec(`conda run python C:\\Users\\jpcha\\Tree\\Files\\Acad\\CS198-199\\ExtendedTinyFaces\\process.py -D C:\\Users\\jpcha\\Tree\\Files\\Acad\\CS198-199\\testing\\backend\\process`, (e, out, err) => {console.log(out)});
+        let run = exec(`conda run python /home/ec2-user/processing/process.py -D /home/ec2-user/team1_backend/process`, (e, out, err) => {console.log(out)});
         console.log(run);
         res.send('Uploaded!');
     }); 
