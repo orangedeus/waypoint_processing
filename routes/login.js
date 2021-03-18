@@ -6,13 +6,17 @@ var db = require('../db');
 router.post('/', function(req, res, next) {
     body = req.body;
     console.log(req.body);
-    db.one(`SELECT code FROM codes WHERE code = '${body.code}';`).then(data => {
+    db.one(`SELECT * FROM codes WHERE code = '${body.code}';`).then(data => {
         console.log(data);
-        res.send({valid: 1});
+        if (data.admin == true) {
+            res.send({user: 1, admin: 1, code: body.code})
+        } else {
+            res.send({user: 1, admin: 0})
+        }
     })
     .catch(error => {
         console.log(error);
-        res.send({valid: 0});
+        res.send({user: 0, admin: 0})
     });
 });
 

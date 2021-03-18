@@ -34,6 +34,16 @@ router.get('/all/annotated', function(req, res, next) {
     });
 });
 
+router.get('/all/screened', function(req, res, next) {
+    db.multi('SELECT location, people FROM screened;').then(data => {
+        stops = data[0]
+        res.json({data: stops});
+    })
+    .catch(error => {
+        console.log(error)
+    });
+});
+
 router.get('/all/cleaned', function(req, res, next) {
     let distance = (x1, y1, x2, y2) => {
         let x = (x2 - x1) ** 2;
@@ -214,6 +224,17 @@ router.post('/update2', function(req, res, next) {
     });
 
     db.multi()
+});
+
+router.post('/insert_screened', function(req, res, next) {
+    body = req.body;
+    db.any(`INSERT INTO screened values (point(${body.location.x}, ${body.location.y}), ${body.people});`)
+    .then(() => {
+        res.send("Success!")
+    })
+    .catch(error => {
+        console.log(error)
+    });
 });
 
 router.post('/insert2', function(req, res, next) {
