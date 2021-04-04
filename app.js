@@ -14,6 +14,7 @@ var processRouter = require('./routes/process');
 var loginRouter = require('./routes/login');
 var instRouter = require('./routes/instrumentation');
 var genRouter = require('./routes/generate');
+var routesRouter = require('./routes/routes');
 
 var app = express();
 
@@ -38,6 +39,7 @@ app.use('/process', processRouter);
 app.use('/login', loginRouter);
 app.use('/instrumentation', instRouter);
 app.use('/generate', genRouter);
+app.use('/routes', routesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
