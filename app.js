@@ -4,8 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fileUpload = require('express-fileupload');
+var busboy = require('connect-busboy');
 
-
+var processv2router = require('./routes/processv2');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var stopsRouter = require('./routes/stops');
@@ -25,12 +26,16 @@ const cors = require('cors');
 app.use(cors({ origin: true }));
 app.use(logger('dev'));
 app.use(express.json());
-app.use(fileUpload());
+app.use('/v2/process', busboy(), processv2router);
+app.use(fileUpload({
+  useTempFiles: true
+}));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/videos', express.static(__dirname + '/videos'));
-app.use('/process', express.static(__dirname + '/process'));
+app.use('/watch', express.static(__dirname + '/process'));
+app.use('/spliced', express.static('/home/ec2-user/processing/speed'));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/stops', stopsRouter);

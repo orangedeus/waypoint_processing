@@ -6,12 +6,17 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "busboy": "^0.3.1",
+    "connect-busboy": "^0.0.2",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-fileupload": "^1.2.0",
+    "fs-extra": "^9.1.0",
     "haversine": "^1.1.1",
+    "http-delayed-response": "^0.0.4",
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "nanoid": "^3.1.22",
