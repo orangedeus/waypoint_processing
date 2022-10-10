@@ -90,12 +90,13 @@ router.get('/upload_status', (req, res, next) => {
                 } catch (error) {
                     console.log(error);
                 }
+                res.send(response);
             } else {
                 tracking_start(filename, route, batch).then((tracking) => {
                     response.tracking = tracking;
+                    res.send(response);
                 })
             }
-            res.send(response);
             return;
         })
     } else {
@@ -142,7 +143,7 @@ router.post('/convert', (req, res, next) => {
     let conversion = async () => {
 
         for (const key of Object.keys(files)) {
-            let filename = `/home/ec2-user/team1_backend/process/${files[key].name}`;
+            let filename = `${process.cwd()}/process/${files[key].name}`;
 
             let run;
             if (fs.existsSync(filename)) {
@@ -186,7 +187,7 @@ router.post('/process', (req, res, next) => {
     let execution = async () => {
         console.log('Processing', body);
         for (const key of Object.keys(body)) {
-            let file = `/home/ec2-user/team1_backend/process/${body[key].filename}`;
+            let file = `${process.cwd()}/process/${body[key].filename}`;
             let filenameArr = file.split(".");
             if (filenameArr[filenameArr.length - 1] == 'ifv') {
                 console.log('converting');
@@ -207,11 +208,11 @@ router.post('/process', (req, res, next) => {
             }
             let run;
             if (fs.existsSync(gpx)) {
-                run = await exec(`conda run python /home/ec2-user/processing/process.py -F ${file} -G ${gpx} -R '${body[key].route}' -B ${body[key].batch} -T ${body[key].tracking}`);
+                run = await exec(`conda run python ${process.cwd()}/processing/process.py -F ${file} -G ${gpx} -R '${body[key].route}' -B ${body[key].batch} -T ${body[key].tracking}`);
             } else if (fs.existsSync(csv) || fs.existsSync(xls)) {
-                run = await exec(`conda run python /home/ec2-user/processing/process.py -F  ${file} -SH ${fs.existsSync(csv) ? csv : xls} -R '${body[key].route}' -B ${body[key].batch} -T ${body[key].tracking}`);
+                run = await exec(`conda run python ${process.cwd()}/processing/process.py -F  ${file} -SH ${fs.existsSync(csv) ? csv : xls} -R '${body[key].route}' -B ${body[key].batch} -T ${body[key].tracking}`);
             } else {
-                run = await exec(`conda run python /home/ec2-user/processing/process.py -F ${file} -R '${body[key].route}' -B ${body[key].batch} -T ${body[key].tracking}`);
+                run = await exec(`conda run python ${process.cwd()}/processing/process.py -F ${file} -R '${body[key].route}' -B ${body[key].batch} -T ${body[key].tracking}`);
             }
             if (run.stderr.includes("ERROR ENCOUNTERED")) {
                 response[body[key].filename] = 'failed';

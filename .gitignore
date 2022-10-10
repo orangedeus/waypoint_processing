@@ -3,11 +3,12 @@
 !.gitignore
 !bin
 !public
+!processing
+!process
 !routes
 !views
 !*.js
 !*.json
 !*.sql
 !*.md
-
 config.js
