@@ -8,3 +8,6 @@
 !*.js
 !*.json
 !*.sql
+!*.md
+
+config.js

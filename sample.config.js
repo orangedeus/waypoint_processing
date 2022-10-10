@@ -1,0 +1,1 @@
+export const WAYPOINT_BACKEND_API = "<BACKEND_API_URL>";

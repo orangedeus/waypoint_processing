@@ -9,6 +9,8 @@ var db = require('../db');
 var crypto = require('crypto');
 router.use(express.json());
 
+const { WAYPOINT_BACKEND_API } = require('../config');
+
 const generateChecksum = (data, algo, enc) => {
     return crypto.createHash(algo || 'md5').update(data, 'utf8').digest(enc || 'hex');
 }
@@ -17,7 +19,7 @@ const uploadPath = path.join(process.cwd(), 'process');
 
 var check_tracking = (filename, route, batch) => {
     return new Promise((resolve, reject) => {
-        axios.get(`http://18.136.217.164:3001/process/tracking_status?filename=${filename}&route=${route}&batch=${batch}`).then((res) => {
+        axios.get(`${WAYPOINT_BACKEND_API}/process/tracking_status?filename=${filename}&route=${route}&batch=${batch}`).then((res) => {
             resolve(res.data)
         }).catch((error) => {
             reject(error)
@@ -27,7 +29,7 @@ var check_tracking = (filename, route, batch) => {
 
 var tracking_start = (filename, route, batch) => {
     return new Promise((resolve, reject) => {
-        axios.post('http://18.136.217.164:3001/process/tracking', {
+        axios.post(`${WAYPOINT_BACKEND_API}/process/tracking`, {
             stage: 'initial',
             status: "Uploading",
             fileName: filename,
@@ -42,7 +44,7 @@ var tracking_start = (filename, route, batch) => {
 }
 
 var tracking_update = (filename, route, batch, tracking, status) => {
-    axios.post('http://18.136.217.164:3001/process/tracking', {
+    axios.post(`${WAYPOINT_BACKEND_API}/process/tracking`, {
         stage: 'update',
         status: status,
         fileName: filename,
@@ -68,7 +70,7 @@ router.get('/check/:filename', (req, res, next) => {
     } else {
 
     }
-    res.send({bytes: bytes});
+    res.send({ bytes: bytes });
 });
 
 router.get('/upload_status', (req, res, next) => {
@@ -105,7 +107,7 @@ router.get('/upload_status', (req, res, next) => {
     }
 })
 
-router.get('/finish', function(req, res, next) {
+router.get('/finish', function (req, res, next) {
     fs.emptyDir(uploadPath, (err) => {
         if (err) {
             res.status(404).send('error');
@@ -223,7 +225,7 @@ router.post('/process', (req, res, next) => {
 });
 
 
-router.post('/chunk', function(req, res) {
+router.post('/chunk', function (req, res) {
     let uploadState = 'uploading';
 
     const busboy = req.busboy;
@@ -254,7 +256,7 @@ router.post('/chunk', function(req, res) {
 
     if (fileSize == chunkStart) {
         uploadState = 'uploaded';
-        res.send({status: 1});
+        res.send({ status: 1 });
     }
 
     req.pipe(busboy);
@@ -275,19 +277,19 @@ router.post('/chunk', function(req, res) {
 
         file.pipe(fstream);
 
-        file.on("error", (e) => {console.log(e)});
-        file.on("limit", (e) => {console.log(e)});
+        file.on("error", (e) => { console.log(e) });
+        file.on("limit", (e) => { console.log(e) });
 
         fstream.on("close", () => {
             console.log(" - Chunk finished.");
         });
     });
 
-    busboy.on("finish", function(a) {
+    busboy.on("finish", function (a) {
         state = 'uploaded';
         let currFileSize = fs.statSync(filePath).size;
 
-        fs.open(filePath, 'r', function(errOpen, fd) {
+        fs.open(filePath, 'r', function (errOpen, fd) {
             if (errOpen) {
                 throw errOpen;
             }
@@ -306,15 +308,15 @@ router.post('/chunk', function(req, res) {
                     'File integrity?': `${resChecksum} == ${checksum} - ${resChecksum == checksum}`
                 });
                 if (resChecksum == checksum) {
-                    res.send({status: 1})
+                    res.send({ status: 1 })
                 } else {
-                    res.send({status: 0})
+                    res.send({ status: 0 })
                 }
             })
         })
     });
-    busboy.on("error", function(a) {
-        return res.send({status: 0});
+    busboy.on("error", function (a) {
+        return res.send({ status: 0 });
     });
 })
 
@@ -348,7 +350,7 @@ router.post('/chunk', function(req, res) {
 //     }
 
 //     req.pipe(busboy);
- 
+
 //     busboy.on("file", (fieldname, file, filename) => {
 //         let filePath = path.join(uploadPath, filename);
 //         let fstream;
