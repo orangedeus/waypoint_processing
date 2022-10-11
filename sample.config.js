@@ -1,1 +1,5 @@
-export const WAYPOINT_BACKEND_API = "<BACKEND_API_URL>";
+require('dotenv').config({ path: '.env.local' });
+
+var config = {
+    WAYPOINT_BACKEND_API: process.env.WAYPOINT_BACKEND_API || ""
+}
