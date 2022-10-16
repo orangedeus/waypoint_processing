@@ -96,7 +96,6 @@ class FaceDetect:
             self.play(self.frames)
 
         self.cap.release()
-        cv2.destroyAllWindows()
         print("Time elapsed: {}, Max number of detected people: {}".format(self.time, self.max))
         gc.collect()
 
@@ -113,7 +112,7 @@ class FaceDetect:
         print("[*] Playing...")
         for i in frames:
             time.sleep(0.05)
-            cv2.imshow("Video", i)
+            # cv2.imshow("Video", i)
             c = cv2.waitKey(1)
             if c == 27: # esc press
                 break

@@ -3,10 +3,18 @@ import argparse
 import hashlib
 import json
 import time
+import os
+from dotenv import load_dotenv
 
-UPLOAD_URL = 'http://18.136.217.164:3001/upload'
-INSERT_URL = 'http://18.136.217.164:3001/stops/insert'
-INSERT2_URL = 'http://18.136.217.164:3001/stops/insert_screened'
+load_dotenv('.env.local')
+BACKEND_API = os.getenv("WAYPOINT_BACKEND_API", "")
+
+
+print("Backend api is:" + BACKEND_API);
+
+UPLOAD_URL = '{}/upload'.format(BACKEND_API)
+INSERT_URL = '{}/stops/insert'.format(BACKEND_API)
+INSERT2_URL = '{}/stops/insert_screened'.format(BACKEND_API)
 
 
 UPLOAD_RETRIES = 10

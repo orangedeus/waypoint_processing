@@ -3,3 +3,5 @@
 !.gitignore
 !*.py
 !*.md
+!data
+!requirements.txt

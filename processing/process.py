@@ -16,6 +16,7 @@ import requests
 import xml.etree.ElementTree as ET
 import copy
 import pandas as pd
+from dotenv import load_dotenv
 
 
 def eprint(*args, **kwargs):
@@ -35,6 +36,10 @@ def sign(x):
 
 class Process:
     def __init__(self, dir, out_gpx, out_vid, sens, noise, file, gpx, sheet, route, batch, tracking):
+        
+        load_dotenv('.env.local')
+        BACKEND_API = os.getenv("WAYPOINT_BACKEND_API", "")
+
         self.script_dir = os.path.dirname(os.path.realpath(__file__))
         self.directory = dir
         self.output_gpx = self.script_dir + "/" + out_gpx
@@ -47,8 +52,8 @@ class Process:
         self.people = 0
         self.batch = batch
         self.route = route
-        self.stats_url = 'http://18.136.217.164:3001/process/tracking/stats'
-        self.tracking_url = 'http://18.136.217.164:3001/process/tracking'
+        self.stats_url = '{}/process/tracking/stats'.format(BACKEND_API)
+        self.tracking_url = '{}/process/tracking'.format(BACKEND_API)
         self.speed_bool = True
         self.tracking_number = tracking
 
